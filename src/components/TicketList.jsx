@@ -1,5 +1,4 @@
-import React from 'react';
-import TicketCard from './TicketCard';
+import PreviewTicket from './PreviewTicket';
 
 const TicketList = ({ tickets, activeTab }) => {
   if (tickets.length === 0) {
@@ -16,7 +15,7 @@ const TicketList = ({ tickets, activeTab }) => {
       {tickets
         .slice(activeTab === 'upcoming' ? 1 : 0)
         .map(ticket => (
-          <TicketCard key={ticket.pnr} ticket={ticket} />
+          <PreviewTicket key={ticket.pnr} ticket={ticket} />
         ))}
     </div>
   );

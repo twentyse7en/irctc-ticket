@@ -157,6 +157,152 @@
 }
 
 .ticket-card.featured {
+}
+
+.preview-ticket {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.preview-ticket .journey-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.preview-ticket .ticket-content {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.preview-ticket .date-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.preview-ticket .day-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #007AFF;
+  margin-bottom: 0.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+}
+
+.preview-ticket .date-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-ticket .month {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #8e8e93;
+  text-transform: uppercase;
+}
+
+.preview-ticket .day-number {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #8e8e93;
+}
+
+.preview-ticket .stations {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000000;
+}
+
+.preview-ticket .arrow {
+  color: #8e8e93;
+  font-weight: 300;
+}
+
+.preview-ticket .time-info {
+  font-size: 0.95rem;
+  color: #007AFF;
+  font-weight: 500;
+}
+
+.preview-ticket .secondary-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #8e8e93;
+  border-top: 1px solid rgba(60, 60, 67, 0.1);
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  font-weight: 400;
+}
+
+.preview-ticket:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.preview-ticket .stations {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  color: #000000;
+}
+
+.preview-ticket .arrow {
+  color: #8e8e93;
+  font-weight: 300;
+}
+
+.preview-ticket .time-info {
+  display: flex;
+  font-size: 1.1rem;
+  align-items: center;
+  gap: 0.75rem;
+  color: #8e8e93;
+  font-weight: 400;
+}
+
+.preview-ticket .time-info .time {
+  color: #007AFF;
+  font-weight: 500;
+}
+
+.preview-ticket .time-info .day {
+  font-weight: 400;
+}
+  color: #8e8e93;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.preview-ticket .secondary-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #8e8e93;
+  border-top: 1px solid rgba(60, 60, 67, 0.1);
+  padding-top: 0.8rem;
+  font-weight: 400;
+}
+
+.ticket-card.featured {
   background: linear-gradient(to bottom right, #007aff, #0051a8);
   padding: 1.5rem;
   box-shadow: 0 8px 24px rgba(0, 122, 255, 0.25);
