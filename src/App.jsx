@@ -3,6 +3,7 @@ import './App.css'
 
 function App() {
   const [tickets, setTickets] = useState([])
+  const [activeTab, setActiveTab] = useState('upcoming')
 
   const handlePasteTicket = async () => {
     try {
@@ -21,6 +22,14 @@ function App() {
     }
   }
 
+  const filterTickets = (type) => {
+    const now = new Date()
+    return tickets.filter(ticket => {
+      const ticketDate = new Date(ticket.date)
+      return type === 'upcoming' ? ticketDate >= now : ticketDate < now
+    })
+  }
+
   useEffect(() => {
     const savedTickets = localStorage.getItem('tickets')
     if (savedTickets) {
@@ -35,9 +44,26 @@ function App() {
       </header>
 
       <main className="ios-content">
-        <button className="ios-button primary" onClick={handlePasteTicket}>
-          Copy from Clipboard
-        </button>
+          <div className="featured-ticket">
+            <div className="ticket-card featured">
+              <time>{new Date(0).toLocaleDateString()}</time>
+            </div>
+          </div>
+
+        <div className="tabs">
+          <button 
+            className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
+            onClick={() => setActiveTab('upcoming')}
+          >
+            Upcoming
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
+            onClick={() => setActiveTab('past')}
+          >
+            Past Trips
+          </button>
+        </div>
 
         <div className="tickets-list">
           {tickets.length === 0 ? (
@@ -46,14 +72,20 @@ function App() {
               <p>Paste your ticket details to get started</p>
             </div>
           ) : (
-            tickets.map(ticket => (
-              <div key={ticket.id} className="ticket-card">
-                <pre>{ticket.details}</pre>
-                <time>{new Date(ticket.date).toLocaleDateString()}</time>
-              </div>
-            ))
+            filterTickets(activeTab)
+              .slice(activeTab === 'upcoming' ? 1 : 0)
+              .map(ticket => (
+                <div key={ticket.id} className="ticket-card">
+                  <pre>{ticket.details}</pre>
+                  <time>{new Date(ticket.date).toLocaleDateString()}</time>
+                </div>
+              ))
           )}
         </div>
+
+        <button className="ios-button primary" onClick={handlePasteTicket}>
+          Copy from Clipboard
+        </button>
       </main>
       
     </div>
