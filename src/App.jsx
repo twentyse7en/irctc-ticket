@@ -104,8 +104,8 @@ function App() {
           {/* <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
           <TicketList tickets={filterTickets(activeTab)} activeTab={activeTab} /> */}
         </main>
-        <button className="mt-4 w-full bg-[#f16d15] text-white font-medium py-3 rounded-xl shadow-md active:opacity-90" onClick={handlePasteTicket}>
-          Paste from Clipboard
+        <button className="mt-4 mb-5 w-full bg-gradient-to-r from-[#f16d15] to-[#e94f0d] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#ff8642]/20" onClick={handlePasteTicket}>
+          Paste
         </button>
       </div>
     </div>
