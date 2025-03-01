@@ -50,7 +50,7 @@ const TicketCard = ({ ticket }) => {
         {/* Ticket top part */}
         <div className="relative">
           {/* Left ticket notch */}
-          <div className="absolute -left-2 top-1/2 w-4 h-8 bg-[##bcc2cc] rounded-r-full"></div>
+          <div className="absolute -left-2 top-1/2 w-4 h-8 bg-[#bcc2cc] rounded-r-full"></div>
           
           {/* Header */}
           <div className="flex items-center p-4 border-b border-gray-200 border-dashed">
@@ -90,11 +90,11 @@ const TicketCard = ({ ticket }) => {
           </div>
           
           {/* Right ticket notch */}
-          <div className="absolute -right-2 top-1/2 w-4 h-8 bg-[##bcc2cc] rounded-l-full"></div>
+          <div className="absolute -right-2 top-1/2 w-4 h-8 bg-[#bcc2cc] rounded-l-full"></div>
         </div>
         
         {/* Zigzag separator between ticket parts */}
-        <div className="flex w-full overflow-hidden h-2 bg-gray-100">
+        <div className="flex w-full overflow-hidden h-2 bg-[#e2e4e7]">
           {[...Array(40)].map((_, i) => (
             <div key={i} className="w-2 h-2 bg-white transform rotate-45 -translate-y-1 mx-px"></div>
           ))}
