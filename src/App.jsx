@@ -12,6 +12,7 @@ function parseIRCTCTicket(text) {
     },
     name: '',
     compartment: '',
+    departureTime: '',
     seatNumber: ''
   };
   
@@ -30,6 +31,10 @@ function parseIRCTCTicket(text) {
     result.dateOfJourney = new Date(`20${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
   }
   
+    // Extract Departure Time
+    const dpMatch = text.match(/DP:(\d{2}:\d{2})/);
+    if (dpMatch) result.departureTime = dpMatch[1];
+
   // Extract Stations
   const stationMatch = text.match(/([A-Z]+)-([A-Z]+)/);
   if (stationMatch) {
@@ -104,7 +109,7 @@ function App() {
                     <span className="arrow">→</span>
                     <span>{filterTickets('upcoming')[0].station.end}</span>
                   </div>
-                  <time>{filterTickets('upcoming')[0].dateOfJourney}</time>
+                  <time>{filterTickets('upcoming')[0].dateOfJourney} - {filterTickets('upcoming')[0].departureTime}</time>
                 </div>
                 <div className="passenger-details">
                   <div className="name">{filterTickets('upcoming')[0].name}</div>
@@ -150,7 +155,7 @@ function App() {
                       <span className="arrow">→</span>
                       <span>{ticket.station.end}</span>
                     </div>
-                    <time>{ticket.dateOfJourney}</time>
+                    <time>{ticket.dateOfJourney} - {ticket.departureTime}</time>
                   </div>
                   <div className="passenger-details">
                     <div className="name">{ticket.name}</div>
