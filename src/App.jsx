@@ -93,8 +93,8 @@ function App() {
   const featuredTicket = upcomingTickets[0]
 
   return (
-    <div>
-      <div className="bg-gradient-to-b from-slate-500 to-bg-gray-100 h-[300px] w-full absolute top-0 -z-1"></div>
+    <div className="h-full bg-white">
+      <div className="bg-gradient-to-b from-slate-500 to-bg-gray-100 h-[300px] w-full absolute top-0"></div>
       <div className="px-4 py-2 w-full flex flex-col h-screen">
         <header className="my-3">
           <h1 className="text-3xl font-bold text-white">Train Pass</h1>
