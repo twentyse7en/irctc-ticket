@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import FeaturedTicket from './components/FeaturedTicket'
+import TabNavigation from './components/TabNavigation'
+import TicketList from './components/TicketList'
 
 function parseIRCTCTicket(text) {
   const result = {
@@ -63,10 +66,8 @@ function App() {
   const handlePasteTicket = async () => {
     try {
       const text = await navigator.clipboard.readText()
-      // TODO: Parse ticket details from clipboard
       const newTicket = parseIRCTCTicket(text);
       setTickets(prev => [...prev, newTicket])
-      // Store in localStorage for offline access
       localStorage.setItem('tickets', JSON.stringify([...tickets, newTicket]))
     } catch (err) {
       console.error('Failed to read clipboard:', err)
@@ -81,13 +82,15 @@ function App() {
     })
   }
 
-  console.log({tickets});
   useEffect(() => {
     const savedTickets = localStorage.getItem('tickets')
     if (savedTickets) {
       setTickets(JSON.parse(savedTickets))
     }
   }, [])
+
+  const upcomingTickets = filterTickets('upcoming')
+  const featuredTicket = upcomingTickets[0]
 
   return (
     <div className="ios-container">
@@ -96,81 +99,13 @@ function App() {
       </header>
 
       <main className="ios-content">
-          <div className="featured-ticket">
-            {tickets.length > 0 && filterTickets('upcoming')[0] && (
-              <div className="ticket-card featured">
-                <div className="ticket-header">
-                  <div className="pnr">PNR: {filterTickets('upcoming')[0].pnr}</div>
-                  <div className="train">Train: {filterTickets('upcoming')[0].trainId}</div>
-                </div>
-                <div className="journey-details">
-                  <div className="stations">
-                    <span>{filterTickets('upcoming')[0].station.start}</span>
-                    <span className="arrow">→</span>
-                    <span>{filterTickets('upcoming')[0].station.end}</span>
-                  </div>
-                  <time>{filterTickets('upcoming')[0].dateOfJourney} - {filterTickets('upcoming')[0].departureTime}</time>
-                </div>
-                <div className="passenger-details">
-                  <div className="name">{filterTickets('upcoming')[0].name}</div>
-                  <div className="seat">{filterTickets('upcoming')[0].compartment} - {filterTickets('upcoming')[0].seatNumber}</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-        <div className="tabs">
-          <button 
-            className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
-            onClick={() => setActiveTab('upcoming')}
-          >
-            Upcoming
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
-            onClick={() => setActiveTab('past')}
-          >
-            Past Trips
-          </button>
-        </div>
-
-        <div className="tickets-list">
-          {tickets.length === 0 ? (
-            <div className="empty-state">
-              <p>No tickets yet</p>
-              <p>Paste your ticket details to get started</p>
-            </div>
-          ) : (
-            filterTickets(activeTab)
-              .slice(activeTab === 'upcoming' ? 1 : 0)
-              .map(ticket => (
-                <div key={ticket.pnr} className="ticket-card">
-                  <div className="ticket-header">
-                    <div className="pnr">PNR: {ticket.pnr}</div>
-                    <div className="train">Train: {ticket.trainId}</div>
-                  </div>
-                  <div className="journey-details">
-                    <div className="stations">
-                      <span>{ticket.station.start}</span>
-                      <span className="arrow">→</span>
-                      <span>{ticket.station.end}</span>
-                    </div>
-                    <time>{ticket.dateOfJourney} - {ticket.departureTime}</time>
-                  </div>
-                  <div className="passenger-details">
-                    <div className="name">{ticket.name}</div>
-                    <div className="seat">{ticket.compartment} - {ticket.seatNumber}</div>
-                  </div>
-                </div>
-              ))
-          )}
-        </div>
-
+        <FeaturedTicket ticket={featuredTicket} />
+        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        <TicketList tickets={filterTickets(activeTab)} activeTab={activeTab} />
         <button className="ios-button primary" onClick={handlePasteTicket}>
           Copy from Clipboard
         </button>
       </main>
-      
     </div>
   )
 }
