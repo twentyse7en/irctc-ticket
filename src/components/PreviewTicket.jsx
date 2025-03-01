@@ -7,6 +7,11 @@ const PreviewTicket = ({ ticket }) => {
   const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
   const month = date.toLocaleDateString('en-US', { month: 'short' });
   const day = date.getDate();
+  const time = ticket.departureTime.split(':').map((n, i) => parseInt(n)).reduce((h, m) => {
+        const period = h >= 12 ? 'PM' : 'AM';
+        const hour = h % 12 || 12;
+        return `${hour}:${String(m).padStart(2, '0')} ${period}`;
+    }) 
 
   return (
     <div className="preview-ticket">
@@ -24,7 +29,9 @@ const PreviewTicket = ({ ticket }) => {
             <span className="station-name">{ticket.station.end}</span>
           </div>
           <div className="time-info">
-            <span className="departure">{ticket.departureTime}</span>
+            <span className="departure">
+                {time}
+            </span>
           </div>
         </div>
       </div>
