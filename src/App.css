@@ -171,6 +171,76 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.ticket-header .pnr,
+.ticket-header .train {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.journey-details {
+  margin-bottom: 1rem;
+}
+
+.journey-details .stations {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.journey-details .arrow {
+  color: #007aff;
+}
+
+.journey-details time {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.passenger-details {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+}
+
+.passenger-details .name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.passenger-details .seat {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.ticket-card.featured .ticket-header .pnr,
+.ticket-card.featured .ticket-header .train,
+.ticket-card.featured .journey-details time,
+.ticket-card.featured .passenger-details .seat {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ticket-card.featured .journey-details .stations,
+.ticket-card.featured .passenger-details .name {
+  color: white;
+}
+
+.ticket-card.featured .journey-details .arrow {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ticket-card.featured .passenger-details {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
 @keyframes slide-up {
   from {
     opacity: 0;

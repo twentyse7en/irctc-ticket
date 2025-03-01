@@ -1,6 +1,56 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
+function parseIRCTCTicket(text) {
+  const result = {
+    pnr: '',
+    trainId: '',
+    dateOfJourney: null,
+    station: {
+      start: '',
+      end: ''
+    },
+    name: '',
+    compartment: '',
+    seatNumber: ''
+  };
+  
+  // Extract PNR
+  const pnrMatch = text.match(/PNR:(\d+)/);
+  if (pnrMatch) result.pnr = pnrMatch[1];
+  
+  // Extract Train ID
+  const trainMatch = text.match(/TRN:(\d+)/);
+  if (trainMatch) result.trainId = trainMatch[1];
+  
+  // Extract Date of Journey
+  const dateMatch = text.match(/DOJ:(\d{2}-\d{2}-\d{2})/);
+  if (dateMatch) {
+    const dateParts = dateMatch[1].split('-');
+    result.dateOfJourney = new Date(`20${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+  }
+  
+  // Extract Stations
+  const stationMatch = text.match(/([A-Z]+)-([A-Z]+)/);
+  if (stationMatch) {
+    result.station.start = stationMatch[1];
+    result.station.end = stationMatch[2];
+  }
+  
+  // Extract Name
+  const nameMatch = text.match(/Boarding at [A-Z]+ only,\s*([^,]+)/);
+  if (nameMatch) result.name = nameMatch[1].trim();
+  
+  // Extract Compartment and Seat
+  const seatMatch = text.match(/([A-Z]\d+)\s+(\d+)/);
+  if (seatMatch) {
+    result.compartment = seatMatch[1];
+    result.seatNumber = seatMatch[2];
+  }
+  
+  return result;
+}
+
 function App() {
   const [tickets, setTickets] = useState([])
   const [activeTab, setActiveTab] = useState('upcoming')
@@ -9,11 +59,7 @@ function App() {
     try {
       const text = await navigator.clipboard.readText()
       // TODO: Parse ticket details from clipboard
-      const newTicket = {
-        id: Date.now(),
-        details: text,
-        date: new Date().toISOString()
-      }
+      const newTicket = parseIRCTCTicket(text);
       setTickets(prev => [...prev, newTicket])
       // Store in localStorage for offline access
       localStorage.setItem('tickets', JSON.stringify([...tickets, newTicket]))
@@ -25,11 +71,12 @@ function App() {
   const filterTickets = (type) => {
     const now = new Date()
     return tickets.filter(ticket => {
-      const ticketDate = new Date(ticket.date)
+      const ticketDate = new Date(ticket.dateOfJourney)
       return type === 'upcoming' ? ticketDate >= now : ticketDate < now
     })
   }
 
+  console.log({tickets});
   useEffect(() => {
     const savedTickets = localStorage.getItem('tickets')
     if (savedTickets) {
@@ -45,9 +92,26 @@ function App() {
 
       <main className="ios-content">
           <div className="featured-ticket">
-            <div className="ticket-card featured">
-              <time>{new Date(0).toLocaleDateString()}</time>
-            </div>
+            {tickets.length > 0 && filterTickets('upcoming')[0] && (
+              <div className="ticket-card featured">
+                <div className="ticket-header">
+                  <div className="pnr">PNR: {filterTickets('upcoming')[0].pnr}</div>
+                  <div className="train">Train: {filterTickets('upcoming')[0].trainId}</div>
+                </div>
+                <div className="journey-details">
+                  <div className="stations">
+                    <span>{filterTickets('upcoming')[0].station.start}</span>
+                    <span className="arrow">→</span>
+                    <span>{filterTickets('upcoming')[0].station.end}</span>
+                  </div>
+                  <time>{filterTickets('upcoming')[0].dateOfJourney}</time>
+                </div>
+                <div className="passenger-details">
+                  <div className="name">{filterTickets('upcoming')[0].name}</div>
+                  <div className="seat">{filterTickets('upcoming')[0].compartment} - {filterTickets('upcoming')[0].seatNumber}</div>
+                </div>
+              </div>
+            )}
           </div>
 
         <div className="tabs">
@@ -75,9 +139,23 @@ function App() {
             filterTickets(activeTab)
               .slice(activeTab === 'upcoming' ? 1 : 0)
               .map(ticket => (
-                <div key={ticket.id} className="ticket-card">
-                  <pre>{ticket.details}</pre>
-                  <time>{new Date(ticket.date).toLocaleDateString()}</time>
+                <div key={ticket.pnr} className="ticket-card">
+                  <div className="ticket-header">
+                    <div className="pnr">PNR: {ticket.pnr}</div>
+                    <div className="train">Train: {ticket.trainId}</div>
+                  </div>
+                  <div className="journey-details">
+                    <div className="stations">
+                      <span>{ticket.station.start}</span>
+                      <span className="arrow">→</span>
+                      <span>{ticket.station.end}</span>
+                    </div>
+                    <time>{ticket.dateOfJourney}</time>
+                  </div>
+                  <div className="passenger-details">
+                    <div className="name">{ticket.name}</div>
+                    <div className="seat">{ticket.compartment} - {ticket.seatNumber}</div>
+                  </div>
                 </div>
               ))
           )}
