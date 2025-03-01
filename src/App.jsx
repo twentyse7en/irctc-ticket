@@ -93,19 +93,21 @@ function App() {
   const featuredTicket = upcomingTickets[0]
 
   return (
-    <div className="ios-container">
-      <header className="ios-header">
-        <h1>Train Tickets</h1>
-      </header>
-
-      <main className="ios-content">
-        <FeaturedTicket ticket={featuredTicket} />
-        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-        <TicketList tickets={filterTickets(activeTab)} activeTab={activeTab} />
-        <button className="ios-button primary" onClick={handlePasteTicket}>
-          Copy from Clipboard
+    <div>
+      <div className="bg-gradient-to-b from-slate-500 to-bg-gray-100 h-[300px] w-full absolute top-0 -z-1"></div>
+      <div className="px-4 py-2 w-full flex flex-col h-screen">
+        <header className="my-3">
+          <h1 className="text-3xl font-bold text-white">Train Pass</h1>
+        </header>
+        <main className="flex-1 h-0">
+          <FeaturedTicket ticket={featuredTicket} />
+          {/* <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+          <TicketList tickets={filterTickets(activeTab)} activeTab={activeTab} /> */}
+        </main>
+        <button className="mt-4 w-full bg-[#f16d15] text-white font-medium py-3 rounded-xl shadow-md active:opacity-90" onClick={handlePasteTicket}>
+          Paste from Clipboard
         </button>
-      </main>
+      </div>
     </div>
   )
 }

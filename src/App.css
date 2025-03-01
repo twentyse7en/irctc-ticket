@@ -1,4 +1,6 @@
-#root {
+@import "tailwindcss";
+
+/* #root {
   width: 100vw;
   margin: 0;
   padding: 0;
@@ -287,10 +289,7 @@
 .preview-ticket .time-info .day {
   font-weight: 400;
 }
-  color: #8e8e93;
-  font-weight: 400;
-  font-size: 0.85rem;
-}
+
 
 .preview-ticket .secondary-info {
   display: flex;
@@ -402,4 +401,8 @@
   .ios-button:hover {
     background-color: #0051a8;
   }
+} */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
