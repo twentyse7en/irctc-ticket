@@ -1,6 +1,6 @@
 # Train Ticket
 
-Easy way to view upcoming train ticket offline.
+Easy way to view upcoming train ticket (offline).
 
 <img src="https://github.com/user-attachments/assets/a2178c99-f386-443e-a90d-4b24358e346a" width="250" />
 <img src="https://github.com/user-attachments/assets/4e787b56-11a4-4e73-b004-2875aae8ac34" width="250" />
