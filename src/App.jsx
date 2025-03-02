@@ -150,7 +150,7 @@ function App() {
   const featuredTicket = upcomingTickets[0] ?? dummyTicket;
 
   return (
-    <div className="h-full bg-white z-0 relative">
+    <div className="h-full bg-white z-0 relative md:max-w-[400px] md:mx-auto">
       <div className="bg-gradient-to-b from-slate-500 to-bg-gray-100 h-[300px] w-full absolute top-0 -z-1"></div>
       <div className="py-2 w-full flex flex-col h-screen">
         <header className="px-4 my-3 flex justify-between items-center">
