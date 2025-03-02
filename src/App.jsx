@@ -42,8 +42,10 @@ const extractTicketInfo = (text) => {
     departureTime: '',
     arrivalTime: '',
     duration: '',
-    seatNumber: ''
+    seatNumber: '',
+    originalText: '',
   };
+  result.originalText = text;
 	const lines = text.split('\n');
   const pnrIndex = lines.findIndex((line) => line.includes("PNR:"));
   if (pnrIndex === -1) return;
@@ -189,13 +191,9 @@ function App() {
 
   useEffect(() => {
     const savedTickets = localStorage.getItem('tickets')
-    // if (savedTickets) {
-    //   try {
-    //     setTickets(JSON.parse(savedTickets))
-    //   } catch {
-    //     console.error('something went wrong')
-    //   }
-    // }
+    if (savedTickets) {
+        setTickets(JSON.parse(savedTickets))
+    }
   }, [])
 
   const upcomingTickets = filterTickets('upcoming')
