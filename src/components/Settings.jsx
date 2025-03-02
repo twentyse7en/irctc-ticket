@@ -30,9 +30,18 @@ const Settings = ({ onClose }) => {
           <div className="mt-4 bg-white rounded-xl shadow-sm border border-slate-200">
             <button
               onClick={handleClearData}
-              className="w-full px-4 py-3 text-left text-red-600 font-medium hover:bg-slate-50 transition-colors"
+              className="w-full px-4 py-3 text-left text-red-600 font-medium hover:bg-slate-50 transition-colors border-b border-slate-200"
             >
               Clear All Data
+            </button>
+            <button
+              onClick={() => {
+                const data = JSON.stringify(localStorage);
+                navigator.clipboard.writeText(data);
+              }}
+              className="w-full px-4 py-3 text-left text-blue-600 font-medium hover:bg-slate-50 active:opacity-70 transition-colors"
+            >
+              Copy Data to Clipboard
             </button>
           </div>
         </main>

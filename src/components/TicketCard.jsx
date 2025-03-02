@@ -21,7 +21,7 @@ function searchTrainStatus(train) {
 
 function convertTo12Hour(time24) {
     // Parse hours and minutes
-    const [hours, minutes] = time24.split(':').map(Number);
+    const [hours = '00', minutes = '00'] = time24.split(':').map(Number);
     
     // Determine period (AM/PM)
     const period = hours >= 12 ? 'PM' : 'AM';
