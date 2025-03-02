@@ -5,7 +5,7 @@ const FeaturedTicket = ({ ticket }) => {
   if (!ticket) return null;
 
   return (
-    <div className="featured-ticket">
+    <div className="px-3">
       <TicketCard ticket={ticket} featured={true} />
     </div>
   );

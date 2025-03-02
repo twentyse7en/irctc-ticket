@@ -146,7 +146,7 @@ function App() {
           )}
           </section>
         </main>
-        <button className="text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#f16d15] to-[#e94f0d] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#ff8642]/20" onClick={handlePasteTicket}>
+        <button className="text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#5856D6] to-[#6A68FF] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20" onClick={handlePasteTicket}>
           Paste
         </button>
       </div>
