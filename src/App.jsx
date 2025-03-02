@@ -15,6 +15,7 @@ const SettingIcon = () => {
 
 const dummyTicket = {
   pnr: '8754321098',
+  trainName: 'Karnataka Express',
   trainId: '12628',
   dateOfJourney: new Date().toISOString(),
   station: {

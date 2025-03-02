@@ -138,7 +138,7 @@ const TicketCard = ({ ticket }) => {
                 <p className="font-medium">{ticket.pnr}</p>
               </div>
               <div>
-                <button onClick={openCoachPosition}>
+                <button className='text-left' onClick={openCoachPosition}>
                     <p className="text-gray-500 text-xs">SEAT</p>
                     <p className="font-medium underline">{getSeatDetails(ticket)}</p>
                 </button>
