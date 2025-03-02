@@ -190,7 +190,11 @@ function App() {
   useEffect(() => {
     const savedTickets = localStorage.getItem('tickets')
     if (savedTickets) {
-      setTickets(JSON.parse(savedTickets))
+      try {
+        setTickets(JSON.parse(savedTickets))
+      } catch {
+        console.error('something went wrong')
+      }
     }
   }, [])
 
