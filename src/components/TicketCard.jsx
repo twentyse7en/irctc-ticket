@@ -56,7 +56,7 @@ const getSeatDetails = (ticket) => {
 const TicketCard = ({ ticket }) => {
 
   const openCoachPosition = () => {
-    const url = `https://indianrailways.info/coach_position/${ticket.trainId}`;
+    const url = `https://www.trainman.in/coach-position/${ticket.trainId}`;
     window.open(url, '_blank');
   };
 
