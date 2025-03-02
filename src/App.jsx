@@ -12,6 +12,20 @@ const SettingIcon = () => {
   )
 }
 
+const dummyTicket = {
+  pnr: '8754321098',
+  trainId: '12628',
+  dateOfJourney: new Date().toISOString(),
+  station: {
+    start: 'NDLS',
+    end: 'SBC'
+  },
+  name: 'MICHAEL JORDAN',
+  compartment: 'A1',
+  departureTime: '20:20',
+  seatNumber: '23'
+};
+
 function parseIRCTCTicket(text) {
   const result = {
     pnr: '',
@@ -99,7 +113,8 @@ function App() {
   }, [])
 
   const upcomingTickets = filterTickets('upcoming')
-  const featuredTicket = upcomingTickets[0]
+  const featuredTicket = upcomingTickets[0] ?? dummyTicket;
+  console.log({featuredTicket});
 
   return (
     <div className="h-full bg-white z-0 relative">
