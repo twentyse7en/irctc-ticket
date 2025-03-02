@@ -45,6 +45,14 @@ class ErrorBoundary extends Component {
             <button className="copy-button" onClick={this.copyErrorToClipboard}>
               Copy Error Details
             </button>
+            <button 
+              className="retry-button" 
+              onClick={() => {
+                localStorage.removeItem('tickets');
+              }}
+            >
+              Clear Tickets Data
+            </button>
             {this.props.showDetails && (
               <details className="error-details">
                 <summary>Error Details</summary>

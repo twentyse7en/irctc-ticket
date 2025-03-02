@@ -20,6 +20,10 @@ function searchTrainStatus(train) {
 }
 
 function convertTo12Hour(time24) {
+    console.log('time24', time24);
+    if (!time24) {
+        return '-';
+    }
     // Parse hours and minutes
     const [hours = '00', minutes = '00'] = time24.split(':').map(Number);
     
@@ -42,7 +46,20 @@ function formatDate(dateString) {
     return `${day} ${month} (${dayOfWeek})`;
 }
 
+const getSeatDetails = (ticket) => {
+    if (ticket.compartment && ticket.seatNumber) {
+        return `${ticket.compartment} | ${ticket.seatNumber}`;
+    } else {
+        return ticket.status;
+    }
+}
 const TicketCard = ({ ticket }) => {
+
+  const openCoachPosition = () => {
+    const url = `https://indianrailways.info/coach_position/${ticket.trainId}`;
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="max-w-md mx-auto">
       {/* Main ticket container with realistic ticket shape */}
@@ -58,7 +75,7 @@ const TicketCard = ({ ticket }) => {
             <span className="text-white font-bold text-sm drop-shadow-sm">IR</span>
           </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold">Indian Railways</h2>
+              <h2 className="text-xl font-semibold max-w-[190px] overflow-hidden text-ellipsis truncate">{ticket.trainName}</h2>
               <p className="text-gray-500 text-sm">Train #{ticket.trainId}</p>
             </div>
             <button className="bg-gray-100 px-3 py-1 rounded-full flex items-center" onClick={() => searchTrainStatus(ticket.trainId)}>
@@ -83,7 +100,7 @@ const TicketCard = ({ ticket }) => {
               </div>
               
               <div className="text-center min-w-[80px]">
-                <p className="text-2xl font-bold">N . A</p>
+                <p className="text-2xl font-bold">{convertTo12Hour(ticket.arrivalTime)}</p>
                 <p className="text-gray-500">{ticket.station.end}</p>
               </div>
             </div>
@@ -121,8 +138,10 @@ const TicketCard = ({ ticket }) => {
                 <p className="font-medium">{ticket.pnr}</p>
               </div>
               <div>
-                <p className="text-gray-500 text-xs">SEAT</p>
-                <p className="font-medium">{ticket.compartment} | {ticket.seatNumber}</p>
+                <button onClick={openCoachPosition}>
+                    <p className="text-gray-500 text-xs">SEAT</p>
+                    <p className="font-medium underline">{getSeatDetails(ticket)}</p>
+                </button>
               </div>
             </div>
           </div>

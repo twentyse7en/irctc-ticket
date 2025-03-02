@@ -24,7 +24,9 @@ const dummyTicket = {
   name: 'MICHAEL JORDAN',
   compartment: 'A1',
   departureTime: '20:20',
-  seatNumber: '23'
+  arrivalTime: '9:30',
+  seatNumber: '23',
+  status: 'CNF',
 };
 
 const extractTicketInfo = (text) => {
@@ -59,12 +61,11 @@ const extractTicketInfo = (text) => {
         result.trainName = trainMatch[1].trim();
         result.trainId = trainMatch[2];
       }
-  const durationMatch = lines[pnrIndex+1].match(/(\d{2}:\d{2})\s*——\s*([\dHM\s]+)\s*——\s*(\d{2}:\d{2})/);
-  if (durationMatch) {
-           result.departureTime = durationMatch[1];  // First captured group (Start Time)
-        result.duration = durationMatch[2].trim(); // Second captured group (Duration)
-        result.arrivalTime = durationMatch[3];  // Third captured group (End Time)
-  }
+  const cleanDurationLine = lines[pnrIndex+1].replace(/^[^\d:]+|[^\d:]+$/g, '');
+  if (cleanDurationLine) {
+        result.departureTime = cleanDurationLine.slice(0, 5);
+        result.arrivalTime = cleanDurationLine.slice(-5); 
+  };
   
   const stationMatch = lines[pnrIndex+2].split(/\s+/);
   if (stationMatch) {
@@ -84,61 +85,20 @@ if (dateOfJourneyMatch) {
 
     result.dateOfJourney = parsedDate;
   }
-  return result;
-}
 
-function parseIRCTCTicket(text) {
-  const result = {
-    pnr: '',
-    trainId: '',
-    dateOfJourney: null,
-    station: {
-      start: '',
-      end: ''
-    },
-    name: '',
-    compartment: '',
-    departureTime: '',
-    seatNumber: ''
-  };
-  
-  // Extract PNR
-  const pnrMatch = text.match(/PNR:(\d+)/);
-  if (pnrMatch) result.pnr = pnrMatch[1];
-  
-  // Extract Train ID
-  const trainMatch = text.match(/TRN:(\d+)/);
-  if (trainMatch) result.trainId = trainMatch[1];
-  
-  // Extract Date of Journey
-  const dateMatch = text.match(/DOJ:(\d{2}-\d{2}-\d{2})/);
-  if (dateMatch) {
-    const dateParts = dateMatch[1].split('-');
-    result.dateOfJourney = new Date(`20${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+  const passengerNameLine = lines[pnrIndex+8].replace(/\d+/g, "").trim();
+  if (passengerNameLine) {
+    result.name = passengerNameLine;
   }
-  
-    // Extract Departure Time
-    const dpMatch = text.match(/DP:(\d{2}:\d{2})/);
-    if (dpMatch) result.departureTime = dpMatch[1];
+  const seatDetails = lines[pnrIndex+11].split(/[\s*]+/)
+  if (seatDetails && seatDetails.length > 1) {
+    console.log('seatDetails')
+    const [status = '-', compartment = '', seat = ''] = seatDetails[1].split('/');
+    result.status = status;
+    result.compartment = compartment;
+    result.seatNumber = seat;
+  }
 
-  // Extract Stations
-  const stationMatch = text.match(/([A-Z]+)-([A-Z]+)/);
-  if (stationMatch) {
-    result.station.start = stationMatch[1];
-    result.station.end = stationMatch[2];
-  }
-  
-  // Extract Name
-  const nameMatch = text.match(/Boarding at [A-Z]+ only,\s*([^,]+)/);
-  if (nameMatch) result.name = nameMatch[1].trim();
-  
-  // Extract Compartment and Seat
-  const seatMatch = text.match(/([A-Z]\d+)\s+(\d+)/);
-  if (seatMatch) {
-    result.compartment = seatMatch[1];
-    result.seatNumber = seatMatch[2];
-  }
-  
   return result;
 }
 
@@ -169,17 +129,6 @@ function App() {
       setIsProcessing(false);
     }
   };
-
-  const handlePasteTicket = async () => {
-    try {
-      const text = await navigator.clipboard.readText()
-      const newTicket = parseIRCTCTicket(text);
-      setTickets(prev => [...prev, newTicket])
-      localStorage.setItem('tickets', JSON.stringify([...tickets, newTicket]))
-    } catch (err) {
-      console.error('Failed to read clipboard:', err)
-    }
-  }
 
   const filterTickets = (type) => {
     const now = new Date()
@@ -230,8 +179,8 @@ function App() {
             )}
           </section>
         </main>
-        <label className="text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#5856D6] to-[#6A68FF] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20 cursor-pointer text-center">
-          {isProcessing ? 'Processing...' : 'Upload Ticket Image'}
+        <label className={`text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#5856D6] to-[#6A68FF] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20 cursor-pointer text-center ${isProcessing ? 'opacity-50' : ''}`}>
+          {isProcessing ? 'Processing...' : 'Upload'}
           <input
             type="file"
             accept="image/*"
