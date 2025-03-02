@@ -14,32 +14,46 @@ const PreviewTicket = ({ ticket }) => {
     }) 
 
   return (
-    <div className="preview-ticket">
-      <div className="ticket-content">
-        <div className="date-column">
-          <div className="day-name">{dayName}</div>
-          <div className="date-info">
-            <div className="month">{day} {month}</div>
-          </div>
-        </div>
-        <div className="journey-info">
-          <div className="stations">
-            <span className="station-name">{ticket.station.start}</span>
-            <span className="arrow">→</span>
-            <span className="station-name">{ticket.station.end}</span>
-          </div>
-          <div className="time-info">
-            <span className="departure">
+    <div className="bg-white rounded-xl overflow-hidden relative border-2 border-gray-100 relative z-0">
+  {/* Ticket top part */}
+    {/* Left ticket notch */}
+    <div className="absolute -left-2 top-1/2 w-4 h-8 bg-[#f2f2f7] rounded-r-full z-1"></div>
+
+    {/* Right ticket notch */}
+    <div className="absolute -right-2 top-1/2 w-4 h-8 bg-[#f2f2f7] rounded-l-full z-1"></div>
+    
+    <div className="p-4 border-b-2 border-gray-100 border-dashed">
+      <div className="flex items-center">
+        <div className="flex-1">
+          <div className="flex items-center">
+            <div className="mr-7">
+              <div className="text-lg font-bold text-[#FF3B30]">{dayName}</div>
+              <div className="text-sm text-[#8E8E93]">{day} {month}</div>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center mb-1">
+                <span className="font-medium text-[#1C1C1E]">{ticket.station.start}</span>
+                <span className="mx-2 text-[#007AFF]">→</span>
+                <span className="font-medium text-[#1C1C1E]">{ticket.station.end}</span>
+              </div>
+              <div className="text-sm  font-medium text-[#8E8E93]">
                 {time}
-            </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="secondary-info">
-        <span className="seat-info">{ticket.compartment} - {ticket.seatNumber}</span>
-        <span className="train-info">Train: {ticket.trainId}</span>
       </div>
     </div>
+
+  
+  {/* Ticket bottom part */}
+  <div className="relative p-4 bg-white">
+    <div className="flex justify-between text-sm">
+      <span className="text-[#8E8E93] font-medium">{ticket.compartment} - {ticket.seatNumber}</span>
+      <span className="text-[#8E8E93] font-medium">Train: {ticket.trainId}</span>
+    </div>
+  </div>
+</div>
   );
 };
 

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import FeaturedTicket from './components/FeaturedTicket'
-import TabNavigation from './components/TabNavigation'
-import TicketList from './components/TicketList'
+import PreviewTicket from './components/PreviewTicket'
 import Settings from './components/Settings'
 
 const SettingIcon = () => {
@@ -110,8 +109,28 @@ function App() {
           <h1 className="text-3xl font-bold text-white">Train Pass</h1>
           <button className='h-6 text-white' onClick={() => setShowSettings(true)}><SettingIcon /></button>
         </header>
-        <main className="flex-1 h-0">
-          <FeaturedTicket ticket={featuredTicket} />
+        <main className="flex-1 h-0 overflow-auto">
+          <section>
+            <FeaturedTicket ticket={featuredTicket} />
+          </section>
+          <section className="mt-6">
+            <h2 className="text-xl font-semibold text-slate-800 mb-4">Upcoming Journey</h2>
+          {upcomingTickets.length > 2 ? (
+            <section className="mt-6">
+              <div className="space-y-4">
+                {upcomingTickets.slice(1).map((ticket, index) => (
+                  <PreviewTicket key={ticket.pnr || index} ticket={ticket} />
+                ))}
+              </div>
+            </section>
+          ): (
+            <div className="flex flex-col items-center justify-center text-gray-500 py-8">
+              <span className="text-4xl mb-2">🛋️</span>
+              <p className="text-lg font-medium">No upcoming journeys, chill madi!</p>
+              <p className="text-sm">Time to plan your next adventure</p>
+            </div>
+          )}
+          </section>
         </main>
         <button className="text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#f16d15] to-[#e94f0d] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#ff8642]/20" onClick={handlePasteTicket}>
           Paste
