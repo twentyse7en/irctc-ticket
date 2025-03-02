@@ -3,6 +3,7 @@ import './App.css'
 import FeaturedTicket from './components/FeaturedTicket'
 import PreviewTicket from './components/PreviewTicket'
 import Settings from './components/Settings'
+import { createWorker } from 'tesseract.js';
 
 const SettingIcon = () => {
   return (
@@ -25,6 +26,64 @@ const dummyTicket = {
   departureTime: '20:20',
   seatNumber: '23'
 };
+
+const extractTicketInfo = (text) => {
+  const result = {
+    pnr: '',
+    trainId: '',
+    trainName: '',
+    dateOfJourney: null,
+    station: {
+      start: '',
+      end: ''
+    },
+    name: '',
+    compartment: '',
+    departureTime: '',
+    arrivalTime: '',
+    duration: '',
+    seatNumber: ''
+  };
+	const lines = text.split('\n');
+  const pnrIndex = lines.findIndex((line) => line.includes("PNR:"));
+  if (pnrIndex === -1) return;
+  
+  const pnrMatch = lines[pnrIndex].match(/PNR:\s*(\d+)/);
+  if (pnrMatch) result.pnr = pnrMatch[1];
+  
+  // Extract train name and ID
+      const trainMatch = lines[pnrIndex].match(/([^(]+)\s*\((\d+)\)/);
+      if (trainMatch) {
+        result.trainName = trainMatch[1].trim();
+        result.trainId = trainMatch[2];
+      }
+  const durationMatch = lines[pnrIndex+1].match(/(\d{2}:\d{2})\s*——\s*([\dHM\s]+)\s*——\s*(\d{2}:\d{2})/);
+  if (durationMatch) {
+           result.departureTime = durationMatch[1];  // First captured group (Start Time)
+        result.duration = durationMatch[2].trim(); // Second captured group (Duration)
+        result.arrivalTime = durationMatch[3];  // Third captured group (End Time)
+  }
+  
+  const stationMatch = lines[pnrIndex+2].split(/\s+/);
+  if (stationMatch) {
+  	result.station.start = stationMatch[0];
+    result.station.end = stationMatch[stationMatch.length - 1]
+  }
+  
+  const dateOfJourneyMatch = lines[pnrIndex+3].match(/([A-Za-z]{3}), (\d{2}) ([A-Za-z]{3})/);
+
+if (dateOfJourneyMatch) {
+    const date = dateOfJourneyMatch[2]; // "06"
+    const month = dateOfJourneyMatch[3]; // "Mar"
+    const year = new Date().getFullYear(); // Assume the current year
+
+    // Convert to a Date object
+    const parsedDate = new Date(`${month} ${date}, ${year}`);
+
+    result.dateOfJourney = parsedDate;
+  }
+  return result;
+}
 
 function parseIRCTCTicket(text) {
   const result = {
@@ -85,6 +144,29 @@ function App() {
   const [tickets, setTickets] = useState([])
   const [activeTab, setActiveTab] = useState('upcoming')
   const [showSettings, setShowSettings] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setIsProcessing(true);
+    try {
+      const worker = await createWorker("eng", 1, {
+          logger: function(m){console.log(m);}
+        });
+      const { data: { text } } = await worker.recognize(file);
+      await worker.terminate();
+
+      const newTicket = extractTicketInfo(text);
+      setTickets(prev => [...prev, newTicket]);
+      localStorage.setItem('tickets', JSON.stringify([...tickets, newTicket]));
+    } catch (err) {
+      console.error('Failed to process image:', err);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const handlePasteTicket = async () => {
     try {
@@ -129,26 +211,33 @@ function App() {
           </section>
           <section className="mt-6">
             <h2 className="text-xl font-semibold text-slate-800 mb-4">Upcoming Journey</h2>
-          {upcomingTickets.length > 2 ? (
-            <section className="mt-6">
-              <div className="space-y-4">
-                {upcomingTickets.slice(1).map((ticket, index) => (
-                  <PreviewTicket key={ticket.pnr || index} ticket={ticket} />
-                ))}
+            {upcomingTickets.length > 2 ? (
+              <section className="mt-6">
+                <div className="space-y-4">
+                  {upcomingTickets.slice(1).map((ticket, index) => (
+                    <PreviewTicket key={ticket.pnr || index} ticket={ticket} />
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-gray-500 py-8">
+                <span className="text-4xl mb-2">🛋️</span>
+                <p className="text-lg font-medium">No upcoming journeys, chill madi!</p>
+                <p className="text-sm">Time to plan your next adventure</p>
               </div>
-            </section>
-          ): (
-            <div className="flex flex-col items-center justify-center text-gray-500 py-8">
-              <span className="text-4xl mb-2">🛋️</span>
-              <p className="text-lg font-medium">No upcoming journeys, chill madi!</p>
-              <p className="text-sm">Time to plan your next adventure</p>
-            </div>
-          )}
+            )}
           </section>
         </main>
-        <button className="text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#5856D6] to-[#6A68FF] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20" onClick={handlePasteTicket}>
-          Paste
-        </button>
+        <label className="text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#5856D6] to-[#6A68FF] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20 cursor-pointer text-center">
+          {isProcessing ? 'Processing...' : 'Upload Ticket Image'}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            disabled={isProcessing}
+          />
+        </label>
       </div>
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
     </div>
