@@ -1,6 +1,6 @@
 # Train Ticket
 
-Easy way to view upcoming train ticket (offline).
+Access your train tickets offline.
 
 <img src="https://github.com/user-attachments/assets/a2178c99-f386-443e-a90d-4b24358e346a" width="250" />
 <img src="https://github.com/user-attachments/assets/4e787b56-11a4-4e73-b004-2875aae8ac34" width="250" />
@@ -16,9 +16,9 @@ Easy way to view upcoming train ticket (offline).
 - Make life easier :)
 
 # Instruction
-- Go to url in safari
-- open share
-- click Add to homescreen
+- Open url in safari
+- Open share
+- Click Add to homescreen
 
 ## Motivation
 
@@ -27,8 +27,6 @@ Easy way to view upcoming train ticket (offline).
 - With the rising AI tools, I wanted to check how quickly can I build this. I used Trae and Claude to build this. It's not jaw dropping experience but it's helpful, or I would have never done this.
 
 ## Todo
-
-If I frequently use this, I planning to implement:
 - Add info about how the screenshot should be
 - Improve error boundary UI
 - If I add the same ticket again update the old one (don't duplicate)
