@@ -103,7 +103,7 @@ const TicketCard = ({ ticket }) => {
         {/* Ticket bottom part */}
         <div className="relative">
           {/* Left ticket notch */}
-          <div className="absolute -left-2 top-1/2 w-4 h-8 bg-[#fafafa] rounded-r-full"></div>
+          <div className="absolute -left-2 top-1/2 w-4 h-8 inset-shadow-sm rounded-r-full inset-shadow-sm"></div>
           
           {/* Passenger Details */}
           <div className="p-4 pb-6">
@@ -128,7 +128,7 @@ const TicketCard = ({ ticket }) => {
           </div>
           
           {/* Right ticket notch */}
-          <div className="absolute -right-2 top-1/2 w-4 h-8 bg-[#fafafa] rounded-l-full"></div>
+          <div className="absolute -right-2 top-1/2 w-4 h-8 bg-[#fafafa] rounded-l-full inset-shadow-sm"></div>
         </div>
       </div>
     </div>
