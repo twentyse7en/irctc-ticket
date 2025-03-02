@@ -151,8 +151,8 @@ function App() {
   return (
     <div className="h-full bg-white z-0 relative">
       <div className="bg-gradient-to-b from-slate-500 to-bg-gray-100 h-[300px] w-full absolute top-0 -z-1"></div>
-      <div className="px-4 py-2 w-full flex flex-col h-screen">
-        <header className="my-3 flex justify-between items-center">
+      <div className="py-2 w-full flex flex-col h-screen">
+        <header className="px-4 my-3 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-white">Train Pass</h1>
           <button className='h-6 w-6 text-white' onClick={() => setShowSettings(true)}><SettingIcon /></button>
         </header>
@@ -160,7 +160,7 @@ function App() {
           <section>
             <FeaturedTicket ticket={featuredTicket} />
           </section>
-          <section className="mt-6">
+          <section className="mt-6 px-4">
             <h2 className="text-xl font-semibold text-slate-800 mb-4">Upcoming Journey</h2>
             {upcomingTickets.length > 2 ? (
               <section className="mt-6">
@@ -179,7 +179,7 @@ function App() {
             )}
           </section>
         </main>
-        <label className={`text-xl mt-4 mb-5 w-full bg-gradient-to-r from-[#5856D6] to-[#6A68FF] text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20 cursor-pointer text-center ${isProcessing ? 'opacity-50' : ''}`}>
+        <label className={`mx-6 text-md font-semibold mt-4 mb-5  bg-gradient-to-br from-slate-400 to-slate-500  text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#5856D6]/20 cursor-pointer text-center ${isProcessing ? 'opacity-50' : ''}`}>
           {isProcessing ? 'Processing...' : 'Upload'}
           <input
             type="file"
