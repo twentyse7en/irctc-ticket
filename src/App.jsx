@@ -114,7 +114,6 @@ function App() {
 
   const upcomingTickets = filterTickets('upcoming')
   const featuredTicket = upcomingTickets[0] ?? dummyTicket;
-  console.log({featuredTicket});
 
   return (
     <div className="h-full bg-white z-0 relative">
