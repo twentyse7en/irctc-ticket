@@ -18,7 +18,7 @@ const extractTicketInfoIOS = (text) => {
     originalText: "",
   };
   result.originalText = text;
-  const lines = text.split("\n");
+  const lines = text.split("\n").filter((line) => !!line);
   const pnrIndex = lines.findIndex((line) => line.includes("PNR:"));
   if (pnrIndex === -1) return;
 
@@ -204,6 +204,6 @@ export const extractTicketInfo = (text) => {
     return extractTicketInfoAndroid(text);
   } else {
     // For desktop or other devices, use iOS extraction as fallback
-    return extractTicketInfoAndroid(text);
+    return extractTicketInfoIOS(text);
   }
 };

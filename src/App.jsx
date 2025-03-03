@@ -46,9 +46,7 @@ function App() {
 
     setIsProcessing(true);
     try {
-      const worker = await createWorker("eng", 1, {
-          logger: function(m){console.log(m);}
-        });
+      const worker = await createWorker("eng", 1, {});
       const { data: { text } } = await worker.recognize(file);
       await worker.terminate();
 
