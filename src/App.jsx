@@ -67,7 +67,7 @@ function App() {
     return tickets.filter(ticket => {
       const ticketDate = new Date(ticket.dateOfJourney)
       return type === 'upcoming' ? ticketDate >= now : ticketDate < now
-    })
+    }).sort((a, b) => new Date(a.dateOfJourney) - new Date(b.dateOfJourney));
   }
 
   useEffect(() => {
