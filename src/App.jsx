@@ -4,6 +4,7 @@ import FeaturedTicket from './components/FeaturedTicket'
 import PreviewTicket from './components/PreviewTicket'
 import Settings from './components/Settings'
 import { createWorker } from 'tesseract.js';
+import { extractTicketInfo } from './utils/extract'
 
 const SettingIcon = () => {
   return (
@@ -30,84 +31,14 @@ const dummyTicket = {
   status: 'CNF',
 };
 
-const extractTicketInfo = (text) => {
-  const result = {
-    pnr: '',
-    trainId: '',
-    trainName: '',
-    dateOfJourney: null,
-    station: {
-      start: '',
-      end: ''
-    },
-    name: '',
-    compartment: '',
-    departureTime: '',
-    arrivalTime: '',
-    duration: '',
-    seatNumber: '',
-    originalText: '',
-  };
-  result.originalText = text;
-	const lines = text.split('\n');
-  const pnrIndex = lines.findIndex((line) => line.includes("PNR:"));
-  if (pnrIndex === -1) return;
-  
-  const pnrMatch = lines[pnrIndex].match(/PNR:\s*(\d+)/);
-  if (pnrMatch) result.pnr = pnrMatch[1];
-  
-  // Extract train name and ID
-      const trainMatch = lines[pnrIndex].match(/([^(]+)\s*\((\d+)\)/);
-      if (trainMatch) {
-        result.trainName = trainMatch[1].trim();
-        result.trainId = trainMatch[2];
-      }
-  const cleanDurationLine = lines[pnrIndex+1].replace(/^[^\d:]+|[^\d:]+$/g, '');
-  if (cleanDurationLine) {
-        result.departureTime = cleanDurationLine.slice(0, 5);
-        result.arrivalTime = cleanDurationLine.slice(-5); 
-  };
-  
-  const stationMatch = lines[pnrIndex+2].split(/\s+/);
-  if (stationMatch) {
-  	result.station.start = stationMatch[0];
-    result.station.end = stationMatch[stationMatch.length - 1]
-  }
-  
-  const dateOfJourneyMatch = lines[pnrIndex+3].match(/([A-Za-z]{3}), (\d{2}) ([A-Za-z]{3})/);
 
-if (dateOfJourneyMatch) {
-    const date = dateOfJourneyMatch[2]; // "06"
-    const month = dateOfJourneyMatch[3]; // "Mar"
-    const year = new Date().getFullYear(); // Assume the current year
-
-    // Convert to a Date object
-    const parsedDate = new Date(`${month} ${date}, ${year}`);
-
-    result.dateOfJourney = parsedDate;
-  }
-
-  const passengerNameLine = lines[pnrIndex+8].replace(/\d+/g, "").trim();
-  if (passengerNameLine) {
-    result.name = passengerNameLine;
-  }
-  const seatDetails = lines[pnrIndex+11].split(/[\s*]+/)
-  if (seatDetails && seatDetails.length > 1) {
-    console.log('seatDetails')
-    const [status = '-', compartment = '', seat = ''] = seatDetails[1].split('/');
-    result.status = status;
-    result.compartment = compartment;
-    result.seatNumber = seat;
-  }
-
-  return result;
-}
 
 function App() {
   const [tickets, setTickets] = useState([])
   const [activeTab, setActiveTab] = useState('upcoming')
   const [showSettings, setShowSettings] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
+  console.log(tickets);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -147,6 +78,7 @@ function App() {
   }, [])
 
   const upcomingTickets = filterTickets('upcoming')
+  console.log('upcoming tickets', upcomingTickets);
   const featuredTicket = upcomingTickets[0] ?? dummyTicket;
 
   return (
@@ -163,7 +95,7 @@ function App() {
           </section>
           <section className="mt-6 px-4">
             <h2 className="text-xl font-semibold text-slate-800 mb-4">Upcoming Journey</h2>
-            {upcomingTickets.length > 2 ? (
+            {upcomingTickets.length >= 2 ? (
               <section className="mt-6">
                 <div className="space-y-4">
                   {upcomingTickets.slice(1).map((ticket, index) => (
